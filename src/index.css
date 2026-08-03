@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #100a03;
+    color: #f0ebe3;
+    font-family: 'Literata', Georgia, serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-gold-200 text-choco-600 font-label font-semibold tracking-widest text-sm uppercase px-8 py-4 rounded-full transition-all duration-300 hover:bg-gold-100 hover:shadow-glow-gold active:scale-95 focus:outline-none focus:ring-2 focus:ring-gold-200/50 focus:ring-offset-2 focus:ring-offset-choco-500;
+  }
+
+  .btn-gold {
+    @apply inline-flex items-center gap-2 bg-gold-200 text-choco-600 font-label font-semibold tracking-widest text-sm uppercase px-8 py-4 rounded-full transition-all duration-300 hover:bg-gold-100 hover:shadow-glow-gold active:scale-95 focus:outline-none focus:ring-2 focus:ring-gold-200/50 focus:ring-offset-2 focus:ring-offset-choco-500;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2 border-2 border-gold-200/60 text-gold-200 font-label font-semibold tracking-widest text-sm uppercase px-8 py-4 rounded-full transition-all duration-300 hover:bg-gold-200 hover:text-choco-600 active:scale-95 focus:outline-none focus:ring-2 focus:ring-gold-200/50 focus:ring-offset-2 focus:ring-offset-choco-500;
+  }
+
+  .card-product {
+    @apply bg-choco-400 rounded-3xl overflow-hidden shadow-warm-md border border-gold-200/10 transition-all duration-300 hover:shadow-warm-lg hover:-translate-y-1 hover:border-gold-200/25;
+  }
+
+  .section-label {
+    @apply font-label text-sm font-semibold tracking-[0.15em] uppercase text-gold-200;
+  }
+
+  .input-field {
+    @apply w-full rounded-2xl border border-gold-200/20 bg-choco-300/60 px-5 py-4 font-body text-base text-cream-200 placeholder:text-cream-600/40 transition-all duration-200 focus:border-gold-200/50 focus:bg-choco-300/80 focus:outline-none focus:ring-2 focus:ring-gold-200/20;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

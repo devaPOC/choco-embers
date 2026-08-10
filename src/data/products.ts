@@ -17,7 +17,7 @@ export const CATEGORIES: ProductCategory[] = [
   {
     id: 'fruit',
     title: 'Fruit-Flavoured Chocolates',
-    subtitle: 'Real fruit notes folded into silky dark chocolate — bright, fresh, and indulgent.',
+    subtitle: 'Real fruit notes folded into silky dark chocolate - bright, fresh, and indulgent.',
     products: [
       {
         id: 'blueberry',
@@ -78,7 +78,7 @@ export const CATEGORIES: ProductCategory[] = [
       {
         id: 'coconut-dark',
         name: 'Dark Coconut Bar',
-        description: '72% dark chocolate with jaggery-toasted coconut — deep, earthy, and crisp.',
+        description: '72% dark chocolate with jaggery-toasted coconut - deep, earthy, and crisp.',
         image: 'https://images.pexels.com/photos/2067396/pexels-photo-2067396.jpeg?auto=compress&cs=tinysrgb&w=900',
         accent: '#3f2a1a',
       },
@@ -98,9 +98,9 @@ export const ALL_PRODUCTS = CATEGORIES.flatMap((c) => c.products);
 export const BRAND = {
   name: 'Choco Ember',
   tagline: 'Handmade chocolates, crafted with care in Visakhapatnam.',
-  whatsappNumber: '918106945511', // not a placeholder — do not replace this number
+  whatsappNumber: '918106945511', // not a placeholder - do not replace this number
   location: 'Visakhapatnam, Andhra Pradesh, India',
   founder: 'Vineel Vishnu Sai Ram',
   intro:
-    'At Choco Ember, we bring you a delightful range of handmade chocolates, crafted with care, creativity, and the finest cocoa. Every bite offers a rich, smooth, and memorable chocolate experience. Treat yourself — perfect for sweet cravings, gifts, and special moments.',
+    'At Choco Ember, we bring you a delightful range of handmade chocolates, crafted with care, creativity, and the finest cocoa. Every bite offers a rich, smooth, and memorable chocolate experience. Treat yourself - perfect for sweet cravings, gifts, and special moments.',
 };

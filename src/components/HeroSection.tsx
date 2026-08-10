@@ -168,7 +168,7 @@ export default function HeroSection({ onNavigateMenu }: Props) {
         >
           At Choco Ember, we bring you a delightful range of handmade chocolates, crafted with
           care, creativity, and the finest cocoa. Every bite offers a rich, smooth, and memorable
-          chocolate experience. Treat yourself — perfect for sweet cravings, gifts, and special
+          chocolate experience. Treat yourself - perfect for sweet cravings, gifts, and special
           moments.
         </p>
 

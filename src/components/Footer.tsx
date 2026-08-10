@@ -51,7 +51,7 @@ export default function Footer({ onNavigateHome }: Props) {
               Our promise
             </p>
             <p className="font-body text-sm leading-relaxed text-cream-200/60">
-              Every piece is handmade in small batches, with the finest cocoa and real fruit — no
+              Every piece is handmade in small batches, with the finest cocoa and real fruit - no
               shortcuts, no preservatives. Just honest chocolate, made to be shared.
             </p>
           </div>

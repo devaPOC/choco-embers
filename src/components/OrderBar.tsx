@@ -10,39 +10,48 @@ import {
   ExternalLink,
   CheckCircle2,
   Pencil,
+  Loader2
 } from 'lucide-react';
-import { ALL_PRODUCTS, BRAND } from '../data/products';
+import { BRAND } from '../data/products';
+import { createOrder } from '../app/actions/checkout';
 
 type Props = {
   quantities: Record<string, number>;
   onIncrement: (id: string) => void;
   onDecrement: (id: string) => void;
   onClear: () => void;
+  products?: any[];
 };
 
-type Screen = 'summary' | 'confirm' | 'qr';
+type Screen = 'summary' | 'checkout' | 'success' | 'qr';
 
-export default function OrderBar({ quantities, onIncrement, onDecrement, onClear }: Props) {
+export default function OrderBar({ quantities, onIncrement, onDecrement, onClear, products = [] }: Props) {
   const [open, setOpen] = useState(false);
   const [screen, setScreen] = useState<Screen>('summary');
   const [whatsappUrl, setWhatsappUrl] = useState('');
   const [qrDataUrl, setQrDataUrl] = useState('');
+  const [customerName, setCustomerName] = useState('');
+  const [customerPhone, setCustomerPhone] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [orderId, setOrderId] = useState('');
 
-  const items = ALL_PRODUCTS.filter((p) => (quantities[p.id] ?? 0) > 0).map((p) => ({
+  const items = products.filter((p) => (quantities[p.id] ?? 0) > 0).map((p) => ({
     product: p,
     qty: quantities[p.id],
   }));
   const totalItems = items.reduce((sum, i) => sum + i.qty, 0);
+  const totalPrice = items.reduce((sum, i) => sum + (i.product.price * i.qty), 0);
   const hasItems = totalItems > 0;
 
-  const buildWhatsAppUrl = () => {
+  const buildWhatsAppUrl = (id?: string) => {
     const lines = items.map((i) => `• ${i.qty}x ${i.product.name}`).join('\n');
-    const message = `Hi Choco Ember! I'd like to order:\n${lines}\n\nPlease confirm availability and pricing.`;
+    const orderRef = id ? `(Order Ref: #${id.slice(0, 8)})\n` : '';
+    const message = `Hi Choco Ember! I'd like to fast-track my order ${orderRef}\n${lines}\n\nPlease confirm availability and pricing.`;
     return `https://wa.me/${BRAND.whatsappNumber}?text=${encodeURIComponent(message)}`;
   };
 
-  const handleOrderNow = async () => {
-    const url = buildWhatsAppUrl();
+  const handleShowQr = async () => {
+    const url = buildWhatsAppUrl(orderId);
     const qr = await QRCode.toDataURL(url, {
       width: 280,
       margin: 2,
@@ -52,6 +61,30 @@ export default function OrderBar({ quantities, onIncrement, onDecrement, onClear
     setWhatsappUrl(url);
     setQrDataUrl(qr);
     setScreen('qr');
+  };
+
+  const handleCheckout = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const res = await createOrder({
+      customerName,
+      customerPhone,
+      total: totalPrice,
+      items: items.map(i => ({
+        productId: i.product.id,
+        productName: i.product.name,
+        quantity: i.qty,
+        price: i.product.price
+      }))
+    });
+    setLoading(false);
+    if (res.success && res.orderId) {
+      setOrderId(res.orderId);
+      setScreen('success');
+      onClear();
+    } else {
+      alert('Failed to place order. Please try again.');
+    }
   };
 
   const openDrawer = (s: Screen = 'summary') => {
@@ -90,10 +123,10 @@ export default function OrderBar({ quantities, onIncrement, onDecrement, onClear
               </span>
             </button>
             <button
-              onClick={() => openDrawer('confirm')}
+              onClick={() => openDrawer('checkout')}
               className="flex items-center gap-2 rounded-full bg-gold-200 px-5 py-3 font-label text-sm font-semibold uppercase tracking-wider text-choco-600 transition-all hover:bg-gold-100 active:scale-95 sm:px-7"
             >
-              Order Now
+              Checkout
             </button>
           </div>
         </div>
@@ -166,20 +199,20 @@ export default function OrderBar({ quantities, onIncrement, onDecrement, onClear
                     onClick={() => { onClear(); closeAll(); }}
                     className="mt-4 w-full font-label text-xs font-semibold uppercase tracking-wider text-cream-200/40 transition-colors hover:text-gold-200"
                   >
-                    Done — clear order
+                    Done - clear order
                   </button>
                 </div>
               </div>
             )}
 
-            {/* ── Confirm Screen ── */}
-            {screen === 'confirm' && (
+            {/* ── Checkout Screen ── */}
+            {screen === 'checkout' && (
               <div className="p-6 sm:p-8">
                 <div className="mb-6 flex items-center justify-between">
                   <div>
-                    <p className="section-label">Confirm order</p>
+                    <p className="section-label">Checkout</p>
                     <h3 className="font-display text-2xl font-semibold text-cream-100">
-                      Ready to send?
+                      Your Details
                     </h3>
                   </div>
                   <button
@@ -192,7 +225,7 @@ export default function OrderBar({ quantities, onIncrement, onDecrement, onClear
                 </div>
 
                 {/* Order recap */}
-                <div className="mb-6 space-y-2 rounded-2xl border border-gold-200/10 bg-choco-300/40 px-4 py-4">
+                <div className="mb-6 max-h-40 overflow-y-auto space-y-2 rounded-2xl border border-gold-200/10 bg-choco-300/40 px-4 py-4">
                   {items.map(({ product, qty }) => (
                     <div key={product.id} className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
@@ -208,26 +241,81 @@ export default function OrderBar({ quantities, onIncrement, onDecrement, onClear
                       </span>
                     </div>
                   ))}
+                  <div className="pt-2 border-t border-gold-200/10 mt-2 flex justify-between font-label text-sm text-cream-100">
+                    <span>Total</span>
+                    <span className="text-gold-200">₹{totalPrice}</span>
+                  </div>
                 </div>
 
-                <p className="mb-6 font-body text-sm leading-relaxed text-cream-200/60 text-center">
-                  We'll send these details to Choco Ember on WhatsApp. They'll confirm availability and pricing with you.
-                </p>
+                <form onSubmit={handleCheckout} className="space-y-4">
+                  <div>
+                    <label className="mb-1 block font-label text-xs uppercase tracking-wider text-gold-200">Name</label>
+                    <input
+                      required
+                      type="text"
+                      value={customerName}
+                      onChange={e => setCustomerName(e.target.value)}
+                      className="w-full rounded-xl border border-gold-200/30 bg-choco-500 p-3 font-body text-cream-100 focus:border-gold-200 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block font-label text-xs uppercase tracking-wider text-gold-200">Phone</label>
+                    <input
+                      required
+                      type="tel"
+                      value={customerPhone}
+                      onChange={e => setCustomerPhone(e.target.value)}
+                      className="w-full rounded-xl border border-gold-200/30 bg-choco-500 p-3 font-body text-cream-100 focus:border-gold-200 focus:outline-none"
+                    />
+                  </div>
+                  
+                  <div className="space-y-3 pt-4">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="flex w-full items-center justify-center gap-2.5 rounded-full bg-gold-200 px-6 py-4 font-label text-sm font-semibold uppercase tracking-wider text-choco-600 transition-all hover:bg-gold-100 hover:shadow-glow-gold active:scale-95 disabled:opacity-50"
+                    >
+                      {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : <CheckCircle2 className="h-5 w-5" />}
+                      Place Order
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setScreen('summary')}
+                      className="flex w-full items-center justify-center gap-2 rounded-full border border-gold-200/25 px-6 py-4 font-label text-sm font-semibold uppercase tracking-wider text-gold-200 transition-all hover:bg-gold-200/10 active:scale-95"
+                    >
+                      <Pencil className="h-4 w-4" />
+                      Back to Menu
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
 
-                <div className="space-y-3">
+            {/* ── Success Screen ── */}
+            {screen === 'success' && (
+              <div className="p-6 sm:p-8 flex flex-col items-center text-center">
+                <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20 text-green-400">
+                  <CheckCircle2 className="h-8 w-8" />
+                </div>
+                <h3 className="mb-2 font-display text-2xl font-semibold text-cream-100">
+                  Order Placed!
+                </h3>
+                <p className="mb-6 font-body text-cream-200/70">
+                  Your order #{orderId.slice(0, 8)} has been received by our team.
+                </p>
+                <div className="w-full space-y-3">
                   <button
-                    onClick={handleOrderNow}
+                    onClick={handleShowQr}
                     className="flex w-full items-center justify-center gap-2.5 rounded-full bg-gold-200 px-6 py-4 font-label text-sm font-semibold uppercase tracking-wider text-choco-600 transition-all hover:bg-gold-100 hover:shadow-glow-gold active:scale-95"
                   >
-                    <CheckCircle2 className="h-5 w-5" />
-                    Order Now
+                    <Smartphone className="h-5 w-5" />
+                    Fast-track via WhatsApp
                   </button>
                   <button
-                    onClick={() => setScreen('summary')}
-                    className="flex w-full items-center justify-center gap-2 rounded-full border border-gold-200/25 px-6 py-4 font-label text-sm font-semibold uppercase tracking-wider text-gold-200 transition-all hover:bg-gold-200/10 active:scale-95"
+                    onClick={closeAll}
+                    className="w-full rounded-full border border-gold-200/25 px-6 py-4 font-label text-sm font-semibold uppercase tracking-wider text-gold-200 transition-all hover:bg-gold-200/10 active:scale-95"
                   >
-                    <Pencil className="h-4 w-4" />
-                    Modify Order
+                    Close
                   </button>
                 </div>
               </div>
@@ -296,10 +384,10 @@ export default function OrderBar({ quantities, onIncrement, onDecrement, onClear
 
                 <div className="mt-6 space-y-3">
                   <button
-                    onClick={() => setScreen('confirm')}
+                    onClick={() => setScreen('checkout')}
                     className="flex w-full items-center justify-center gap-2 rounded-full bg-gold-200 px-6 py-4 font-label text-sm font-semibold uppercase tracking-wider text-choco-600 transition-all hover:bg-gold-100 active:scale-95"
                   >
-                    Order Now
+                    Checkout
                   </button>
                   <button
                     onClick={onClear}

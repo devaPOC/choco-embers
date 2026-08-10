@@ -34,11 +34,11 @@ export default function StorySection({ onNavigateMenu }: Props) {
             <div className="space-y-5 font-body text-base leading-relaxed text-cream-200/80 sm:text-lg">
               <p>
                 Choco Ember began in a small Visakhapatnam kitchen, where {BRAND.founder} started
-                tempering chocolate by hand — one small batch at a time.
+                tempering chocolate by hand - one small batch at a time.
               </p>
               <p>
                 We use the finest cocoa, fold in real fruit purées, and toast our own coconut. No
-                shortcuts, no preservatives — just honest, handmade chocolate made to be shared.
+                shortcuts, no preservatives - just honest, handmade chocolate made to be shared.
               </p>
               <p className="font-body italic text-gold-200/80">
                 Every bar and truffle carries the warmth of a home kitchen and the care of a

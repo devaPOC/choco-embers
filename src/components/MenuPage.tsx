@@ -1,5 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
-import { CATEGORIES, BRAND } from '../data/products';
+import { BRAND } from '../data/products';
 import ProductCard from './ProductCard';
 
 type Props = {
@@ -7,9 +7,26 @@ type Props = {
   onIncrement: (id: string) => void;
   onDecrement: (id: string) => void;
   onNavigateHome: () => void;
+  products?: any[];
 };
 
-export default function MenuPage({ quantities, onIncrement, onDecrement, onNavigateHome }: Props) {
+export default function MenuPage({ quantities, onIncrement, onDecrement, onNavigateHome, products = [] }: Props) {
+  // Group products by category
+  const categoriesMap = new Map();
+  products.forEach(p => {
+    if (!categoriesMap.has(p.categoryId)) {
+      categoriesMap.set(p.categoryId, {
+        id: p.category.id,
+        title: p.category.title,
+        subtitle: p.category.subtitle,
+        products: []
+      });
+    }
+    categoriesMap.get(p.categoryId).products.push(p);
+  });
+  
+  const categories = Array.from(categoriesMap.values());
+
   return (
     <div className="bg-choco-500">
       {/* Sticky top nav */}
@@ -59,7 +76,7 @@ export default function MenuPage({ quantities, onIncrement, onDecrement, onNavig
 
       {/* Categories */}
       <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-24">
-        {CATEGORIES.map((category, idx) => (
+        {categories.map((category: any, idx: number) => (
           <section
             key={category.id}
             className={idx > 0 ? 'mt-20 sm:mt-28' : ''}
@@ -81,7 +98,7 @@ export default function MenuPage({ quantities, onIncrement, onDecrement, onNavig
             </div>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {category.products.map((product) => (
+              {category.products.map((product: any) => (
                 <ProductCard
                   key={product.id}
                   product={product}
@@ -101,7 +118,7 @@ export default function MenuPage({ quantities, onIncrement, onDecrement, onNavig
             confirmed on WhatsApp before dispatch. We deliver across Visakhapatnam and ship pan-India.
           </p>
           <p className="mt-4 font-label text-xs font-semibold uppercase tracking-[0.2em] text-gold-200">
-            — {BRAND.founder}, Founder
+            - {BRAND.founder}, Founder
           </p>
         </div>
       </div>

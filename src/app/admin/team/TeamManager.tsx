@@ -10,7 +10,7 @@ type Admin = {
   createdAt: Date;
 };
 
-export default function TeamManager({ initialMembers }: { initialMembers: Admin[] }) {
+export default function TeamManager({ initialMembers, currentUserEmail }: { initialMembers: Admin[], currentUserEmail: string }) {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
@@ -92,14 +92,16 @@ export default function TeamManager({ initialMembers }: { initialMembers: Admin[
                   </p>
                 </div>
                 
-                <button
-                  onClick={() => handleRemove(member.id)}
-                  disabled={loading}
-                  className="rounded-lg p-2 text-cream-200 hover:bg-red-500/20 hover:text-red-400 transition-colors"
-                  title="Remove Member"
-                >
-                  <Trash2 className="h-5 w-5" />
-                </button>
+                {member.email !== currentUserEmail && (
+                  <button
+                    onClick={() => handleRemove(member.id)}
+                    disabled={loading}
+                    className="rounded-lg p-2 text-cream-200 hover:bg-red-500/20 hover:text-red-400 transition-colors"
+                    title="Remove Member"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </button>
+                )}
               </div>
             ))}
 

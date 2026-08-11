@@ -1,7 +1,7 @@
 import { prisma } from '../../../lib/prisma';
 import { Plus, Trash2, Pencil } from 'lucide-react';
 import Link from 'next/link';
-import { deleteProduct } from '../../../actions/menu';
+import { deleteProduct } from '../../actions/menu';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,7 +41,7 @@ export default async function AdminMenu() {
                   {category.products.length} {category.products.length === 1 ? 'Item' : 'Items'}
                 </span>
               </div>
-              
+
               {category.products.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-gold-200/20 bg-choco-500/30 p-8 text-center">
                   <p className="font-body text-sm text-cream-200/40">No products in this category.</p>
@@ -76,7 +76,7 @@ export default async function AdminMenu() {
                           </form>
                         </div>
                       </div>
-                      
+
                       <div className="flex flex-1 flex-col p-5">
                         <div className="mb-2 flex items-start justify-between gap-4">
                           <h3 className="line-clamp-1 font-display text-lg font-semibold text-cream-100">{product.name}</h3>

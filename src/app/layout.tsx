@@ -2,18 +2,45 @@ import type { Metadata } from 'next';
 import '../index.css';
 
 export const metadata: Metadata = {
-  title: 'Choco Ember - Handmade Chocolates, Visakhapatnam',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
+  title: {
+    default: 'Choco Ember - Handmade Chocolates, Visakhapatnam',
+    template: '%s | Choco Ember',
+  },
   description: 'Handmade artisanal chocolates crafted with care in Visakhapatnam. Fruit-flavoured chocolates and coconut chocolate bars by Choco Ember.',
+  keywords: ['Chocolates', 'Handmade', 'Visakhapatnam', 'Artisanal', 'Choco Ember', 'Coconut bars', 'Fruit chocolates'],
+  authors: [{ name: 'Choco Ember' }],
+  creator: 'Choco Ember',
+  publisher: 'Choco Ember',
   icons: {
     icon: '/images/choco_ember_premium_logo_redesign.png',
+    apple: '/images/choco_ember_premium_logo_redesign.png',
   },
   openGraph: {
+    type: 'website',
+    locale: 'en_IN',
+    url: '/',
+    siteName: 'Choco Ember',
+    title: 'Choco Ember - Handmade Chocolates',
+    description: 'Rich, smooth, and memorable handmade chocolates from Visakhapatnam.',
+    images: [
+      {
+        url: '/images/choco_ember_premium_logo_redesign.png',
+        width: 1200,
+        height: 630,
+        alt: 'Choco Ember - Handmade Chocolates',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
     title: 'Choco Ember - Handmade Chocolates',
     description: 'Rich, smooth, and memorable handmade chocolates from Visakhapatnam.',
     images: ['/images/choco_ember_premium_logo_redesign.png'],
   },
-  twitter: {
-    card: 'summary_large_image',
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

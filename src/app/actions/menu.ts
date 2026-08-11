@@ -105,3 +105,20 @@ export async function deleteProduct(id: string) {
     return { success: false, error: 'Failed to delete product' };
   }
 }
+
+export async function updateProduct(id: string, payload: unknown) {
+  try {
+    await requireAdmin();
+    // Partial product schema for updates (we don't strictly require image to change)
+    const UpdateProductSchema = ProductSchema.partial();
+    const data = UpdateProductSchema.parse(payload);
+    await prisma.product.update({ where: { id }, data });
+    revalidatePath('/admin/menu');
+    revalidatePath('/');
+    return { success: true };
+  } catch (error) {
+    if (error instanceof z.ZodError) return { success: false, error: 'Invalid product data' };
+    if (error instanceof Error && error.message.includes('Unauthorized')) return { success: false, error: 'Unauthorized' };
+    return { success: false, error: 'Failed to update product' };
+  }
+}

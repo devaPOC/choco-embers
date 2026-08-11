@@ -4,8 +4,7 @@ import { prisma } from '../../lib/prisma';
 import nodemailer from 'nodemailer';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-jwt-key';
+import crypto from 'crypto';
 
 export async function sendOtp(email: string) {
   try {
@@ -15,8 +14,23 @@ export async function sendOtp(email: string) {
       return { success: false, error: 'Unauthorized email' };
     }
 
-    const code = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+    // Rate limiting: check if OTP was requested recently (e.g. 1 minute)
+    const recentOtp = await prisma.otpCode.findFirst({
+      where: {
+        email,
+        createdAt: {
+          gt: new Date(Date.now() - 60 * 1000)
+        }
+      }
+    });
+
+    if (recentOtp) {
+      return { success: false, error: 'Please wait 60 seconds before requesting another code' };
+    }
+
+    // Secure random generation
+    const code = crypto.randomInt(100000, 999999).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
     await prisma.otpCode.create({
       data: {
@@ -26,7 +40,6 @@ export async function sendOtp(email: string) {
       },
     });
 
-    // Send email via Gmail SMTP
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -45,7 +58,7 @@ export async function sendOtp(email: string) {
     return { success: true };
   } catch (error) {
     console.error('Error sending OTP:', error);
-    return { success: false, error: 'Failed to send OTP. Please check SMTP settings.' };
+    return { success: false, error: 'Failed to send OTP. Please try again.' };
   }
 }
 
@@ -54,7 +67,6 @@ export async function verifyOtp(email: string, code: string) {
     const otp = await prisma.otpCode.findFirst({
       where: {
         email,
-        code,
         expiresAt: {
           gt: new Date(),
         },
@@ -63,16 +75,34 @@ export async function verifyOtp(email: string, code: string) {
     });
 
     if (!otp) {
-      return { success: false, error: 'Invalid or expired OTP' };
+      return { success: false, error: 'No active OTP found or it has expired' };
     }
 
-    // Mark used or delete it
+    if (otp.attempts >= 5) {
+      await prisma.otpCode.delete({ where: { id: otp.id } });
+      return { success: false, error: 'Too many attempts. Please request a new code.' };
+    }
+
+    if (otp.code !== code) {
+      // Increment attempts
+      await prisma.otpCode.update({
+        where: { id: otp.id },
+        data: { attempts: { increment: 1 } }
+      });
+      return { success: false, error: 'Invalid OTP' };
+    }
+
+    // Valid OTP
     await prisma.otpCode.delete({ where: { id: otp.id } });
 
-    // Generate JWT
+    const JWT_SECRET = process.env.JWT_SECRET;
+    if (!JWT_SECRET) {
+      console.error('JWT_SECRET is missing');
+      return { success: false, error: 'Server configuration error' };
+    }
+
     const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1d' });
     
-    // Set cookie
     const cookieStore = await cookies();
     cookieStore.set('admin_token', token, {
       httpOnly: true,

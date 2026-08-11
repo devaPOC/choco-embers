@@ -14,7 +14,7 @@ export default function Footer({ onNavigateHome }: Props) {
           <div>
             <button onClick={onNavigateHome} className="flex items-center gap-3">
               <img
-                src="/images/choco_ember_premium_logo_redesign.png"
+                src="/images/logo.png"
                 alt="Choco Ember logo"
                 className="h-12 w-12 rounded-full object-cover ring-1 ring-gold-200/30"
               />

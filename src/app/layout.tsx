@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   creator: 'Choco Ember',
   publisher: 'Choco Ember',
   icons: {
-    icon: '/images/choco_ember_premium_logo_redesign.png',
-    apple: '/images/choco_ember_premium_logo_redesign.png',
+    icon: '/images/logo.png',
+    apple: '/images/logo.png',
   },
   openGraph: {
     type: 'website',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     description: 'Rich, smooth, and memorable handmade chocolates from Visakhapatnam.',
     images: [
       {
-        url: '/images/choco_ember_premium_logo_redesign.png',
+        url: '/images/logo.png',
         width: 1200,
         height: 630,
         alt: 'Choco Ember - Handmade Chocolates',
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Choco Ember - Handmade Chocolates',
     description: 'Rich, smooth, and memorable handmade chocolates from Visakhapatnam.',
-    images: ['/images/choco_ember_premium_logo_redesign.png'],
+    images: ['/images/logo.png'],
   },
   robots: {
     index: true,

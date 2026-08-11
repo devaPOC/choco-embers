@@ -65,11 +65,10 @@ export default function HeroSection({ onNavigateMenu }: Props) {
 
       {/* Nav */}
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
-          scrolled
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${scrolled
             ? 'bg-choco-400/95 backdrop-blur-md shadow-warm-sm'
             : 'bg-transparent'
-        }`}
+          }`}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
           <button
@@ -77,27 +76,24 @@ export default function HeroSection({ onNavigateMenu }: Props) {
             className="flex items-center gap-3"
           >
             <img
-              src="/images/choco_ember_premium_logo_redesign.png"
+              src="/images/logo.png"
               alt="Choco Ember logo"
-              className={`h-11 w-11 rounded-full object-cover ring-1 transition-all duration-500 ${
-                scrolled ? 'ring-gold-200/30' : 'ring-cream-100/40'
-              }`}
+              className={`h-11 w-11 rounded-full object-cover ring-1 transition-all duration-500 ${scrolled ? 'ring-gold-200/30' : 'ring-cream-100/40'
+                }`}
             />
             <span
-              className={`font-display text-xl font-semibold tracking-wide transition-colors duration-500 ${
-                scrolled ? 'text-gold-200' : 'text-cream-100'
-              }`}
+              className={`font-display text-xl font-semibold tracking-wide transition-colors duration-500 ${scrolled ? 'text-gold-200' : 'text-cream-100'
+                }`}
             >
               Choco Ember
             </span>
           </button>
           <button
             onClick={onNavigateMenu}
-            className={`font-label text-xs font-semibold uppercase tracking-[0.2em] transition-colors duration-500 ${
-              scrolled
+            className={`font-label text-xs font-semibold uppercase tracking-[0.2em] transition-colors duration-500 ${scrolled
                 ? 'text-gold-200 hover:text-gold-100'
                 : 'text-cream-100 hover:text-gold-200'
-            }`}
+              }`}
           >
             Menu
           </button>
@@ -116,7 +112,7 @@ export default function HeroSection({ onNavigateMenu }: Props) {
             {/* Inner ring */}
             <div className="absolute -inset-1.5 rounded-full border border-gold-200/25" />
             <img
-              src="/images/choco_ember_premium_logo_redesign.png"
+              src="/images/logo.png"
               alt="Choco Ember logo"
               className="relative h-28 w-28 rounded-full object-cover ring-2 ring-gold-200/40 shadow-warm-lg sm:h-32 sm:w-32"
             />
@@ -125,9 +121,8 @@ export default function HeroSection({ onNavigateMenu }: Props) {
 
         {/* Eyebrow */}
         <div
-          className={`mb-5 flex items-center gap-2.5 transition-all duration-700 ${
-            mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          }`}
+          className={`mb-5 flex items-center gap-2.5 transition-all duration-700 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
           style={{ transitionDelay: '150ms' }}
         >
           <span className="h-px w-8 bg-gradient-to-r from-transparent to-gold-200/60" />
@@ -141,9 +136,8 @@ export default function HeroSection({ onNavigateMenu }: Props) {
         {/* Headline with clip reveal */}
         <h1 className="mb-5 overflow-hidden font-display text-5xl font-semibold leading-[1.05] text-cream-100 text-balance sm:text-7xl md:text-8xl">
           <span
-            className={`inline-block transition-all duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
-              mounted ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
-            }`}
+            className={`inline-block transition-all duration-[1100ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+              }`}
           >
             Choco Ember
           </span>
@@ -151,9 +145,8 @@ export default function HeroSection({ onNavigateMenu }: Props) {
 
         {/* Tagline */}
         <p
-          className={`mb-8 max-w-2xl font-body text-xl italic leading-relaxed text-gold-200/90 transition-all duration-700 sm:text-2xl ${
-            mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-          }`}
+          className={`mb-8 max-w-2xl font-body text-xl italic leading-relaxed text-gold-200/90 transition-all duration-700 sm:text-2xl ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+            }`}
           style={{ transitionDelay: '500ms' }}
         >
           Where cocoa meets craft.
@@ -161,9 +154,8 @@ export default function HeroSection({ onNavigateMenu }: Props) {
 
         {/* Description */}
         <p
-          className={`mb-10 max-w-2xl font-body text-base leading-relaxed text-cream-100/80 transition-all duration-700 sm:text-lg ${
-            mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-          }`}
+          className={`mb-10 max-w-2xl font-body text-base leading-relaxed text-cream-100/80 transition-all duration-700 sm:text-lg ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+            }`}
           style={{ transitionDelay: '650ms' }}
         >
           At Choco Ember, we bring you a delightful range of handmade chocolates, crafted with
@@ -174,9 +166,8 @@ export default function HeroSection({ onNavigateMenu }: Props) {
 
         {/* CTAs */}
         <div
-          className={`flex flex-col items-center gap-5 transition-all duration-700 sm:flex-row ${
-            mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+          className={`flex flex-col items-center gap-5 transition-all duration-700 sm:flex-row ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
           style={{ transitionDelay: '800ms' }}
         >
           <button
@@ -198,9 +189,8 @@ export default function HeroSection({ onNavigateMenu }: Props) {
 
         {/* Stat strip */}
         <div
-          className={`mt-16 grid grid-cols-3 gap-4 transition-all duration-1000 sm:gap-12 ${
-            mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-          }`}
+          className={`mt-16 grid grid-cols-3 gap-4 transition-all duration-1000 sm:gap-12 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
           style={{ transitionDelay: '1000ms' }}
         >
           {[
@@ -222,9 +212,8 @@ export default function HeroSection({ onNavigateMenu }: Props) {
 
       {/* Scroll cue */}
       <div
-        className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-opacity duration-1000 ${
-          mounted ? 'opacity-100' : 'opacity-0'
-        }`}
+        className={`absolute bottom-8 left-1/2 -translate-x-1/2 transition-opacity duration-1000 ${mounted ? 'opacity-100' : 'opacity-0'
+          }`}
         style={{ transitionDelay: '1200ms' }}
       >
         <div className="flex flex-col items-center gap-2 text-cream-100/50">

@@ -24,7 +24,7 @@ export default function MenuPage({ quantities, onIncrement, onDecrement, onNavig
     }
     categoriesMap.get(p.categoryId).products.push(p);
   });
-  
+
   const categories = Array.from(categoriesMap.values());
 
   return (
@@ -41,7 +41,7 @@ export default function MenuPage({ quantities, onIncrement, onDecrement, onNavig
           </button>
           <div className="flex items-center gap-3">
             <img
-              src="/images/choco_ember_premium_logo_redesign.png"
+              src="/images/logo.png"
               alt="Choco Ember logo"
               className="h-9 w-9 rounded-full object-cover ring-1 ring-gold-200/30"
             />

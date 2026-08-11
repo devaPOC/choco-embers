@@ -7,22 +7,22 @@ import path from 'path';
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 async function main() {
-  const email = "vineelvishnu12@gmail.com";
+  const email = "change-me@gmail.com";
 
   console.log(`Upserting admin with email: ${email}`);
-  
+
   // 1. Create the admin in DB
   const admin = await prisma.admin.upsert({
     where: { email },
     update: {},
     create: { email },
   });
-  
+
   console.log('Admin created/updated successfully:', admin);
 
   // 2. Send email
   console.log('Setting up nodemailer transporter...');
-  
+
   if (!process.env.SMTP_EMAIL || !process.env.SMTP_PASSWORD) {
     throw new Error("Missing SMTP_EMAIL or SMTP_PASSWORD in .env file.");
   }
@@ -48,7 +48,7 @@ async function main() {
         <h3 style="font-family: 'Manrope', system-ui, sans-serif; margin-top: 0; color: #3a5a48; font-size: 16px; text-transform: uppercase; letter-spacing: 1px;">Admin Instructions</h3>
         <ul style="margin-bottom: 0; padding-left: 20px; font-size: 15px; color: #2e2014; line-height: 1.5;">
           <li>Go to the <a href="https://choco-embers.vercel.app/admin" style="color: #b8903a; font-weight: bold; text-decoration: none;">Admin Login Page</a>.</li>
-          <li>Enter your email: <strong>vineelvishnu12@gmail.com</strong>.</li>
+          <li>Enter your email: <strong>change-me@gmail.com</strong>.</li>
           <li>Check your inbox for a One-Time Password (OTP).</li>
           <li>Enter the OTP to access the admin dashboard.</li>
         </ul>

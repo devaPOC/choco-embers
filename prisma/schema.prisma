@@ -7,9 +7,10 @@ datasource db {
 }
 
 model Admin {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  createdAt DateTime @default(now())
+  id           String   @id @default(uuid())
+  email        String   @unique
+  isSuperAdmin Boolean  @default(false)
+  createdAt    DateTime @default(now())
 }
 
 model OtpCode {

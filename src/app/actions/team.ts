@@ -55,6 +55,10 @@ export async function removeTeamMember(id: string) {
       return { success: false, error: 'You cannot remove yourself' };
     }
 
+    if (userToRemove.isSuperAdmin) {
+      return { success: false, error: 'This admin cannot be removed' };
+    }
+
     await prisma.admin.delete({
       where: { id },
     });

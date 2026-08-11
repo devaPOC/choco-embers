@@ -7,6 +7,7 @@ import { Loader2, Plus, Trash2 } from 'lucide-react';
 type Admin = {
   id: string;
   email: string;
+  isSuperAdmin: boolean;
   createdAt: Date;
 };
 
@@ -92,7 +93,7 @@ export default function TeamManager({ initialMembers, currentUserEmail }: { init
                   </p>
                 </div>
                 
-                {member.email !== currentUserEmail && (
+                {!member.isSuperAdmin && member.email !== currentUserEmail && (
                   <button
                     onClick={() => handleRemove(member.id)}
                     disabled={loading}

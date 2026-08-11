@@ -65,3 +65,19 @@ export async function createOrder(payload: unknown) {
     return { success: false, error: 'Failed to create order' };
   }
 }
+
+export async function updateOrderPhone(orderId: string, customerPhone: string) {
+  try {
+    await prisma.order.update({
+      where: { id: orderId },
+      data: { customerPhone }
+    });
+    revalidatePath('/admin');
+    revalidatePath('/admin/orders');
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating order phone:', error);
+    return { success: false, error: 'Failed to update phone number' };
+  }
+}
+

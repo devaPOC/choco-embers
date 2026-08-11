@@ -13,7 +13,7 @@ import {
   Loader2
 } from 'lucide-react';
 import { BRAND } from '../data/products';
-import { createOrder } from '../app/actions/checkout';
+import { createOrder, updateOrderPhone } from '../app/actions/checkout';
 
 type Props = {
   quantities: Record<string, number>;
@@ -34,6 +34,7 @@ export default function OrderBar({ quantities, onIncrement, onDecrement, onClear
   const [customerPhone, setCustomerPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [orderId, setOrderId] = useState('');
+  const [isEditingPhone, setIsEditingPhone] = useState(false);
 
   const items = products.filter((p) => (quantities[p.id] ?? 0) > 0).map((p) => ({
     product: p,
@@ -241,9 +242,9 @@ export default function OrderBar({ quantities, onIncrement, onDecrement, onClear
                       </span>
                     </div>
                   ))}
-                  <div className="pt-2 border-t border-gold-200/10 mt-2 flex justify-between font-label text-sm text-cream-100">
-                    <span>Total</span>
-                    <span className="text-gold-200">₹{totalPrice}</span>
+                  <div className="mt-2 flex justify-between border-t border-gold-200/10 pt-2 font-label text-sm text-cream-100">
+                    <span>Pricing</span>
+                    <span className="text-gold-200 tracking-wider text-xs">Confirmed via WhatsApp</span>
                   </div>
                 </div>
 
@@ -259,13 +260,16 @@ export default function OrderBar({ quantities, onIncrement, onDecrement, onClear
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block font-label text-xs uppercase tracking-wider text-gold-200">Phone</label>
+                    <label className="mb-1 block font-label text-xs uppercase tracking-wider text-gold-200">Add your WhatsApp number</label>
                     <input
                       required
                       type="tel"
+                      pattern="^(\+91[\-\s]?)?[6-9]\d{9}$"
+                      title="Please enter a valid 10-digit Indian mobile number"
+                      placeholder="e.g. 9876543210"
                       value={customerPhone}
                       onChange={e => setCustomerPhone(e.target.value)}
-                      className="w-full rounded-xl border border-gold-200/30 bg-choco-500 p-3 font-body text-cream-100 focus:border-gold-200 focus:outline-none"
+                      className="w-full rounded-xl border border-gold-200/30 bg-choco-500 p-3 font-body text-cream-100 focus:border-gold-200 focus:outline-none placeholder:text-cream-200/30"
                     />
                   </div>
                   
@@ -293,16 +297,73 @@ export default function OrderBar({ quantities, onIncrement, onDecrement, onClear
 
             {/* ── Success Screen ── */}
             {screen === 'success' && (
-              <div className="p-6 sm:p-8 flex flex-col items-center text-center">
+              <div className="flex flex-col items-center p-6 text-center sm:p-8">
                 <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/20 text-green-400">
                   <CheckCircle2 className="h-8 w-8" />
                 </div>
                 <h3 className="mb-2 font-display text-2xl font-semibold text-cream-100">
-                  Order Placed!
+                  Order Received!
                 </h3>
                 <p className="mb-6 font-body text-cream-200/70">
-                  Your order #{orderId.slice(0, 8)} has been received by our team.
+                  Your order #{orderId.slice(0, 8)} has been saved. We will get back to you with pricing and availability to your WhatsApp number.
                 </p>
+
+                {isEditingPhone ? (
+                  <form 
+                    className="w-full space-y-4 mb-6 rounded-2xl border border-gold-200/20 bg-choco-500 p-4"
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      setLoading(true);
+                      await updateOrderPhone(orderId, customerPhone);
+                      setLoading(false);
+                      setIsEditingPhone(false);
+                    }}
+                  >
+                    <div className="text-left">
+                      <label className="mb-1 block font-label text-xs uppercase tracking-wider text-gold-200">Add your WhatsApp number</label>
+                      <input
+                        required
+                        type="tel"
+                        pattern="^(\+91[\-\s]?)?[6-9]\d{9}$"
+                        title="Please enter a valid 10-digit Indian mobile number"
+                        value={customerPhone}
+                        onChange={e => setCustomerPhone(e.target.value)}
+                        className="w-full rounded-xl border border-gold-200/30 bg-choco-400 p-3 font-body text-cream-100 focus:border-gold-200 focus:outline-none"
+                      />
+                    </div>
+                    <div className="flex gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setIsEditingPhone(false)}
+                        className="flex-1 rounded-full border border-gold-200/20 py-2.5 font-label text-xs uppercase text-gold-200 transition hover:bg-gold-200/10"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="flex-1 rounded-full bg-gold-200 py-2.5 font-label text-xs uppercase text-choco-600 transition hover:bg-gold-100 disabled:opacity-50"
+                      >
+                        {loading ? 'Saving...' : 'Save'}
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="mb-6 flex w-full items-center justify-between rounded-xl border border-gold-200/10 bg-choco-300/40 px-4 py-3 text-left">
+                    <div>
+                      <p className="font-label text-[10px] uppercase tracking-widest text-cream-200/50">WhatsApp Number</p>
+                      <p className="font-body text-sm font-semibold text-cream-100">{customerPhone}</p>
+                    </div>
+                    <button
+                      onClick={() => setIsEditingPhone(true)}
+                      className="flex items-center gap-1.5 rounded-full border border-gold-200/20 px-3 py-1.5 font-label text-xs uppercase text-gold-200 transition-colors hover:bg-gold-200/10"
+                    >
+                      <Pencil className="h-3 w-3" />
+                      Edit
+                    </button>
+                  </div>
+                )}
+
                 <div className="w-full space-y-3">
                   <button
                     onClick={handleShowQr}

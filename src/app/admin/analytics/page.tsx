@@ -3,9 +3,20 @@ import AnalyticsDashboard from './AnalyticsDashboard';
 
 export const dynamic = 'force-dynamic';
 
-export default async function AnalyticsPage() {
+export default async function AnalyticsPage(
+  props: {
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const range = (searchParams.range as string) || '7d';
+  
+  let daysCount = 7;
+  if (range === '30d') daysCount = 30;
+  if (range === '90d') daysCount = 90;
+
   const now = new Date();
-  const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const startDate = new Date(now.getTime() - daysCount * 24 * 60 * 60 * 1000);
 
   const [
     totalVisitors,
@@ -15,21 +26,23 @@ export default async function AnalyticsPage() {
     recentOrders,
     topProductsData,
   ] = await Promise.all([
-    prisma.pageVisit.count(),
+    prisma.pageVisit.count({ where: { createdAt: { gte: startDate } } }),
     prisma.pageVisit.groupBy({
       by: ['ipHash'],
+      where: { createdAt: { gte: startDate } },
     }),
-    prisma.order.count(),
+    prisma.order.count({ where: { createdAt: { gte: startDate } } }),
     prisma.order.aggregate({
       _sum: { total: true },
-      where: { status: 'completed' }
+      where: { status: 'completed', createdAt: { gte: startDate } }
     }),
     prisma.order.findMany({
-      where: { createdAt: { gte: sevenDaysAgo } },
+      where: { createdAt: { gte: startDate } },
       select: { createdAt: true, total: true },
     }),
     prisma.orderItem.groupBy({
       by: ['productName'],
+      where: { createdAt: { gte: startDate } },
       _sum: { quantity: true },
       orderBy: { _sum: { quantity: 'desc' } },
       take: 5,
@@ -40,10 +53,10 @@ export default async function AnalyticsPage() {
   const totalRevenue = totalRevenueData._sum.total || 0;
 
   // Process revenue data for chart
-  const days = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(now.getTime() - (6 - i) * 24 * 60 * 60 * 1000);
+  const days = Array.from({ length: daysCount }, (_, i) => {
+    const d = new Date(now.getTime() - (daysCount - 1 - i) * 24 * 60 * 60 * 1000);
     return {
-      date: d.toLocaleDateString('en-US', { weekday: 'short' }),
+      date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
       dateString: d.toISOString().split('T')[0],
       revenue: 0,
     };
@@ -69,6 +82,7 @@ export default async function AnalyticsPage() {
     totalRevenue,
     revenueOverTime: days,
     topProducts,
+    currentRange: range,
   };
 
   return <AnalyticsDashboard data={data} />;

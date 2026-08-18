@@ -112,7 +112,8 @@ export default function InventoryManager({ initialItems }: { initialItems: Inven
 
       {/* Inventory List */}
       <div className="lg:col-span-2 rounded-2xl border border-gold-200/20 bg-choco-400 overflow-hidden shadow-warm-md">
-        <table className="w-full text-left font-body text-sm text-cream-100">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[500px] text-left font-body text-sm text-cream-100">
           <thead className="bg-choco-600/50 text-cream-200/50 font-label text-xs uppercase tracking-wider">
             <tr>
               <th className="px-6 py-4 font-medium">Name</th>
@@ -176,6 +177,7 @@ export default function InventoryManager({ initialItems }: { initialItems: Inven
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

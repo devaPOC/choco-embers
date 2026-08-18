@@ -43,8 +43,8 @@ export default async function AdminDashboard() {
           Low Inventory Alerts
         </h2>
         {lowInventoryItems.length > 0 ? (
-          <div className="rounded-2xl border border-gold-200/10 bg-choco-400 overflow-hidden">
-            <table className="w-full text-left font-body text-sm text-cream-100">
+          <div className="overflow-x-auto rounded-2xl border border-gold-200/10 bg-choco-400 overflow-hidden">
+            <table className="w-full min-w-[500px] text-left font-body text-sm text-cream-100">
               <thead className="bg-choco-600/50 text-cream-200/50 font-label text-xs uppercase tracking-wider">
                 <tr>
                   <th className="px-6 py-4 font-medium">Item</th>

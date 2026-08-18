@@ -51,3 +51,36 @@
     text-wrap: balance;
   }
 }
+
+/* Skeleton shimmer animation */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(233, 193, 118, 0.06) 0%,
+    rgba(233, 193, 118, 0.12) 40%,
+    rgba(233, 193, 118, 0.06) 60%,
+    rgba(233, 193, 118, 0.06) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 0.75rem;
+}
+
+.skeleton-text {
+  background: linear-gradient(
+    90deg,
+    rgba(233, 193, 118, 0.08) 0%,
+    rgba(233, 193, 118, 0.15) 40%,
+    rgba(233, 193, 118, 0.08) 60%,
+    rgba(233, 193, 118, 0.08) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 0.5rem;
+  height: 1em;
+}

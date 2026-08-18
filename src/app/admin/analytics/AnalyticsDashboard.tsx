@@ -63,7 +63,7 @@ export default function AnalyticsDashboard({ data }: { data: AnalyticsData }) {
         </div>
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4 sm:gap-6">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
@@ -85,7 +85,7 @@ export default function AnalyticsDashboard({ data }: { data: AnalyticsData }) {
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-2xl border border-gold-200/20 bg-choco-400 p-6 shadow-warm-md">
           <h2 className="font-display text-xl font-semibold text-cream-100 mb-6">Revenue Overview</h2>
-          <div className="h-[300px] w-full">
+          <div className="h-[220px] sm:h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data.revenueOverTime} margin={{ top: 5, right: 20, bottom: 20, left: 0 }}>
                 <defs>
@@ -123,7 +123,7 @@ export default function AnalyticsDashboard({ data }: { data: AnalyticsData }) {
 
         <div className="rounded-2xl border border-gold-200/20 bg-choco-400 p-6 shadow-warm-md">
           <h2 className="font-display text-xl font-semibold text-cream-100 mb-6">Top Products (Demand)</h2>
-          <div className="h-[300px] w-full">
+          <div className="h-[220px] sm:h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.topProducts} margin={{ top: 5, right: 20, bottom: 20, left: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#4A3424" vertical={false} />

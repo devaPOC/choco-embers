@@ -44,6 +44,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { VisitorTracker } from '../components/VisitorTracker';
+
 export default function RootLayout({
   children,
 }: {
@@ -59,7 +61,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <VisitorTracker />
+        {children}
+      </body>
     </html>
   );
 }

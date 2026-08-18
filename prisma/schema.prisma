@@ -88,3 +88,10 @@ model OrderItem {
   price       Float    @default(0)
   createdAt   DateTime @default(now())
 }
+
+model PageVisit {
+  id        String   @id @default(uuid())
+  path      String
+  ipHash    String   // Hashed IP to track unique visitors
+  createdAt DateTime @default(now())
+}
